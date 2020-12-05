@@ -1,0 +1,210 @@
+#!/bin/bash
+
+# Version
+VERSION=0.0.1
+
+# Colors
+YELLOW='\e[33m'
+LCYAN='\e[96m'
+LBLUE='\e[94m'
+WHITE='\e[97m'
+GREEN='\e[32m'
+NC='\033[0m' # No Color
+
+# Text format
+BB='\e[1m' # Bold
+EB='\e[0m' # Normal
+
+read -r -d '' HELP << EOF
+.......................................................................
+ __      __  ___ ______________.____   _______________________________   
+/  \    /  \/   |   \_   _____/|    |  \______   \_   _____/\______   \  
+\   \/\/   /    ~    \    __)_ |    |   |     ___/|    __)_  |       _/  
+ \        /\    Y    /        \|    |___|    |    |        \ |    |   \  
+  \__/\  /  \___|_  /_______  /|_______ \____|   /_______  / |____|_  /  
+       \/         \/        \/         \/                \/         \/    
+.......................................................................
+
+${WHITE}${BB}Warden helper for Magento 2${EB}${NC}
+${YELLOW}v$VERSION${NC} - By ${YELLOW}Maximiliano Ledesma${NC}
+
+A tool that helps to run commands more easily, in environments created with ${WHITE}${BB}Warden${EB}${NC}.
+
+${YELLOW}${BB}Usage:${EB}${NC}
+  whelper [options]
+
+${YELLOW}${BB}Options:${EB}${NC}
+  ${LCYAN}-h, --help${NC}                          Show brief help
+
+${YELLOW}${BB}Available commands:${EB}${NC}
+ ${YELLOW}Frontend:${NC}
+  ${LCYAN}-cs, --clear-static ${LBLUE}theme${NC}           Remove all static files deployed on ${BB}${WHITE}pub${NC}${EB} folder for specific theme
+  ${LCYAN}-sd, --static-deploy ${LBLUE}theme${NC}          Clear the cache, remove static files and deploy static content through ${BB}${GREEN}bin/magento setup:static-content:deploy${NC}${EB} command for specified theme
+
+ ${YELLOW}Cache:${NC}
+  ${LCYAN}-cc, --cache-clear${NC}                  Clear cache with ${BB}${GREEN}bin/magento cache:clear${NC}${EB} command
+  ${LCYAN}-cf, --cache-flush${NC}                  Flush cache with ${BB}${GREEN}bin/magento cache:flush${NC}${EB} command
+  ${LCYAN}-fr, --flush-redis${NC}                  Flush ${BB}${WHITE}REDIS${NC}${EB} cache using ${BB}${GREEN}warden env exec redis redis-cli flushall${NC}${EB} command
+
+ ${YELLOW}Users:${NC}
+  ${LCYAN}-auc, --admin-user-create${NC}           Runs ${BB}${GREEN}bin/magento admin:user:create${NC}${EB} to create an Admin User
+  ${LCYAN}-cuc, --customer-user-create${NC}        Runs ${BB}${GREEN}n98-magerun customer:create${NC}${EB} to create a customer
+
+ ${YELLOW}Development:${NC}
+  ${LCYAN}-de, --developer-enable${NC}             Set deploy mode to ${BB}${GREEN}developer${NC}${EB}
+  ${LCYAN}-he, --hints-enable${NC}                 Enable ${BB}${GREEN}template hints${NC}${EB} and clear cache
+  ${LCYAN}-hd, --hints-disable${NC}                Disable ${BB}${GREEN}template hints${NC}${EB} and clear cache
+  ${LCYAN}-td, --tail-debug${NC}                   Show the last ${BB}${WHITE}var/log/debug.log${NC}${EB} entries
+  ${LCYAN}-ts, --tail-system${NC}                  Show the last ${BB}${WHITE}var/log/system.log${NC}${EB} entries
+EOF
+
+  case "$1" in
+    -h|--help)
+      
+      echo -e "$HELP"
+      
+      exit 0
+      ;;
+      
+    # Cache
+    # **********
+    
+    -cc|--cache-clear)
+      echo -e "${GREEN}Clear cache"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      warden shell -c "bin/magento c:c"
+     
+      shift
+      ;;
+      
+    -cf|--cache-flush)
+      echo -e "${GREEN}Flush cache"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      warden shell -c "bin/magento c:f"
+     
+      shift
+      ;;
+      
+    -fr|--flush-redis)
+      echo -e "${GREEN}Flush REDIS cache"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      warden env exec redis redis-cli flushall
+     
+      shift
+      ;;
+        
+    # Frontend
+    # **********
+    
+    -cs|--clear-static)
+      THEME=$2
+      echo -e "${GREEN}Clear static files for: $THEME"
+      echo -e "-------------------------------------------------------${NC}"
+      echo -e " "
+      
+      rm -rf pub/static/frontend/$THEME
+      echo -e "${WHITE}Done${NC}"
+      echo -e " "
+     
+      shift
+      ;;
+      
+    -sd|--static-deploy)
+      THEME=$2
+      
+      # Clearing files
+      echo -e "${GREEN}Clear static files for: $THEME"
+      echo -e "-------------------------------------------------------${NC}"
+      rm -rf pub/static/frontend/$THEME
+      echo -e "${WHITE}Done${NC}"
+      echo -e " "
+      
+      # Flushing cache
+      echo -e "${GREEN}Flush cache"
+      echo -e "-------------------------------------------------------${NC}"
+      warden shell -c "bin/magento c:f"
+      echo -e " "
+      
+      # Deploying static content
+      echo -e "${GREEN}Deploy static content for theme: $THEME"
+      echo -e "-------------------------------------------------------${NC}"
+      warden shell -c "bin/magento s:st:d -f --theme=$THEME"
+      shift
+      shift
+      ;;
+      
+    # Users
+    # **********
+    
+    -auc|--admin-user-create)
+      echo -e "${GREEN}Create new admin user"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      warden shell -c "bin/magento admin:user:create"
+     
+      shift
+      ;;
+      
+    -cuc|--customer-user-create)
+      echo -e "${GREEN}Create new customer"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      warden shell -c "n98-magerun customer:create"
+     
+      shift
+      ;;
+        
+    # Development
+    # **********
+    
+    -de|--developer-enable)
+      echo -e "${GREEN}Enable developer mode"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      warden shell -c "bin/magento deploy:mode:set developer"
+     
+      shift
+      ;;
+      
+    -he|--hints-enable)
+      echo -e "${GREEN}Enable template hints"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      warden shell -c "bin/magento dev:template-hints:enable"
+      
+      echo -e " "
+      echo -e "${GREEN}Flush cache"
+      echo -e "-------------------------------------------------------${NC}"
+      warden shell -c "bin/magento c:f"
+     
+      shift
+      ;;
+       
+    -td|--tail-debug)
+      echo -e "${GREEN}Show last debug log entries"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      tail var/log/debug.log
+      
+      echo -e " "
+     
+      shift
+      ;;
+      
+    -ts|--tail-system)
+      echo -e "${GREEN}Show last system log entries"
+      echo -e "-------------------------------------------------------${NC}"
+      
+      tail var/log/system.log
+     
+      shift
+      ;;
+      
+    *) 
+      echo -e "$HELP"
+      ;;
+   
+  esac
