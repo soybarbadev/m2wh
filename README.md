@@ -8,21 +8,18 @@ M2WH is a tool to create easier access to common commands in Magento 2 environme
 
 ### Installation
 
-If there is no `~/bin/` folder created, you should run these commands:
+Download **m2wh** from server and make it executable:
 
 ```shell
-$ mkdir $HOME/bin
-$ echo 'export PATH="$HOME/bin:$PATH"' >> $HOME/.bashrc
-$ source ~/.bashrc
+$ wget http://files.maximilianoledesma.com/m2wh
+$ sudo chmod +x m2wh
 ```
-Now, in order to download **m2wh**:
+If you want to use the tool locally:
 
 ```shell
-$ wget --no-check-certificate https://github.com/maxiledesma/m2wh/tarball/1.0.0-beta -P /tmp/ && cd /tmp/
-$ tar -xzvf m2wh.tar.gz
-$ mv m2wh ~/bin/
-$ sudo chmod +x ~/bin/m2wh
+$ sudo cp m2wh /usr/local/bin/m2wh
 ```
+
 ### Usage:
 ```shell
 $ m2wh [options]
@@ -37,25 +34,17 @@ $ m2wh [options]
 ##### Frontend:
 |Command| Description|
 |----|---|
+|**FRONTEND**|
 |`-cs, --clear-static theme`  | Remove all static files deployed on pub folder for specific theme
 |`-sd, --static-deploy theme` | Clear the cache, remove static files and deploy static content through bin/magento setup:static-content:deploy command for specified theme
-
-#### Cache:
-|Command| Description|
-|----|---|
+|**CACHE**|  |
 |`-cc, --cache-clear`| Clear cache with bin/magento cache:clear command
 |`-cf, --cache-flush`| Flush cache with bin/magento cache:flush command
 |`-fr, --flush-redis`| Flush REDIS cache using warden env exec redis redis-cli flushall command
-
-#### Users:
-|Command| Description|
-|----|---|
+|**USERS**|
 |`-auc, --admin-user-create`|Runs bin/magento admin:user:create to create an Admin User<br>
 |`-cuc, --customer-user-create`|Runs n98-magerun customer:create to create a customer<br>
-
-#### Development:
-|Command| Description|
-|----|---|
+|**DEVELOPMENT**|
 |`-de, --developer-enable`|Set deploy mode to developer
 |`-he, --hints-enable`|Enable template hints and clear cache
 |`-hd, --hints-disable`|Disable template hints and clear cache
