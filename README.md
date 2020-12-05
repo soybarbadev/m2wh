@@ -6,6 +6,16 @@ By **Maximiliano Ledesma**
 
 A tool that helps to run commands more easily, in environments created with Warden.
 
+### Installation
+
+```shell
+$ mkdir $HOME/bin
+$ echo 'export PATH="$HOME/bin:$PATH"' >> $HOME/.bashrc
+$ source ~/.bashrc
+$ wget --no-check-certificate https://github.com/maxiledesma/whelper/tarball/1.0.1-beta -P /tmp/
+
+```
+
 ### Usage:
 ```shell
 $ whelper [options]

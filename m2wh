@@ -8,6 +8,7 @@ YELLOW='\e[33m'
 LCYAN='\e[96m'
 LBLUE='\e[94m'
 WHITE='\e[97m'
+ORANGE='\e[38;5;202m'
 GREEN='\e[32m'
 NC='\033[0m' # No Color
 
@@ -16,19 +17,19 @@ BB='\e[1m' # Bold
 EB='\e[0m' # Normal
 
 read -r -d '' HELP << EOF
-.......................................................................
- __      __  ___ ______________.____   _______________________________   
-/  \    /  \/   |   \_   _____/|    |  \______   \_   _____/\______   \  
-\   \/\/   /    ~    \    __)_ |    |   |     ___/|    __)_  |       _/  
- \        /\    Y    /        \|    |___|    |    |        \ |    |   \  
-  \__/\  /  \___|_  /_______  /|_______ \____|   /_______  / |____|_  /  
-       \/         \/        \/         \/                \/         \/    
-.......................................................................
+
+${ORANGE}${BB}              _____   ________   __      __   ___ ___
+             /     \  \_____  \ /  \    /  \ /   |   \ 
+  ______    /  \ /  \  /  ____/ \   \/\/   //    ~    \    ______
+ /_____/   /    Y    \/       \  \        / \    Y    /   /_____/
+           \____|__  /\_______ \  \__/\  /   \___|_  /
+                   \/         \/       \/          \/
+${EB}${NC}
 
 ${WHITE}${BB}Warden helper for Magento 2${EB}${NC}
 ${YELLOW}v$VERSION${NC} - By ${YELLOW}Maximiliano Ledesma${NC}
 
-A tool that helps to run commands more easily, in environments created with ${WHITE}${BB}Warden${EB}${NC}.
+M2WH is a tool to create easier access to common commands in ${ORANGE}${BB}Magento 2${EB}${NC} environments created using ${WHITE}${BB}Warden${EB}${NC}.
 
 ${YELLOW}${BB}Usage:${EB}${NC}
   whelper [options]
