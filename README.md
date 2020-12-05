@@ -1,6 +1,5 @@
-[![made-with-bash](https://img.shields.io/badge/Made%20with-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
-[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://github.com/maxiledesma/whelper/releases/)
-[![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/Naereen/badges/)
+![GitHub](https://img.shields.io/github/license/maxiledesma/whelper?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/maxiledesma/whelper?style=flat-square)
 # WHELPER
 ### Warden helper for Magento 2
 By **Maximiliano Ledesma**
